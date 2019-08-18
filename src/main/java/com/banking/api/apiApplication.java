@@ -1,29 +1,27 @@
 package com.banking.api;
 
-import io.dropwizard.Application;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
+import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.ServerProperties;
+import java.io.IOException;
+import java.net.URI;
 
-public class apiApplication extends Application<apiConfiguration> {
+public class apiApplication{
 
-    public static void main(final String[] args) throws Exception {
-        new apiApplication().run(args);
+    public static final String BASE_URI = "http://localhost:8080/";
+
+    public static void main(String[] args) throws IOException {
+
+        final HttpServer server = startServer();
+
+        System.out.println("Jersey app started at "+ BASE_URI);
     }
 
-    @Override
-    public String getName() {
-        return "api";
-    }
-
-    @Override
-    public void initialize(final Bootstrap<apiConfiguration> bootstrap) {
-        // TODO: application initialization
-    }
-
-    @Override
-    public void run(final apiConfiguration configuration,
-                    final Environment environment) {
-        // TODO: implement application
+    public static HttpServer startServer() {
+        final ResourceConfig resourceConfig = new ResourceConfig().packages("com.banking.api.controllers");
+        resourceConfig.property(ServerProperties.RESPONSE_SET_STATUS_OVER_SEND_ERROR, "true");
+        return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), resourceConfig);
     }
 
 }
