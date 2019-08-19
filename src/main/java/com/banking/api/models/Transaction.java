@@ -26,10 +26,10 @@ public class Transaction {
         this.failMessage = "";
     }
 
-    public Transaction(String fromBankAccountId, String  toBankAccountId, BigDecimal amount, Currency currency) {
+    public Transaction(String fromAccountId, String  toAccountId, BigDecimal amount, Currency currency) {
         this();
-        this.fromAccountId = fromBankAccountId;
-        this.toAccountId = toBankAccountId;
+        this.fromAccountId = fromAccountId;
+        this.toAccountId = toAccountId;
         this.amount = amount;
         this.currency = currency;
     }

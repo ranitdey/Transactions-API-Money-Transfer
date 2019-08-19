@@ -15,6 +15,7 @@ public class Account {
     private BigDecimal blockedAmount;
     private Currency currency;
 
+
     public Account() {
     }
 
@@ -48,6 +49,27 @@ public class Account {
     public BigDecimal getBlockedAmount() {
         return blockedAmount;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public void setBlockedAmount(BigDecimal blockedAmount) {
+        this.blockedAmount = blockedAmount;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
 
 
     public Currency getCurrency() {

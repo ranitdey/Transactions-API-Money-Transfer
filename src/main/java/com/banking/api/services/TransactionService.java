@@ -5,6 +5,10 @@ import com.banking.api.models.Transaction;
 import com.banking.api.models.TransactionStatus;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.ws.rs.WebApplicationException;
@@ -12,13 +16,42 @@ import javax.ws.rs.core.Response;
 
 public class TransactionService {
 
-    private static final TransactionService transactionService = new TransactionService();
-    private static AtomicInteger atomicInteger = new AtomicInteger(0);
 
-    public static TransactionService getInstance() {
+    private static AtomicInteger atomicInteger = new AtomicInteger(0);
+    private static ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    private TransactionDto transactionDto;
+    private static TransactionService transactionService;
+
+
+    public static TransactionService getInstance(CurrencyConverterService currencyConverterService) {
+        if( transactionService== null){
+            synchronized (TransactionService.class) {
+                if(transactionService == null){
+                    transactionService = new TransactionService(TransactionDto.getInstance(currencyConverterService));
+                }
+            }
+        }
         return transactionService;
     }
-    private TransactionDto transactionDto = TransactionDto.getInstance();
+
+
+
+    TransactionService(TransactionDto transactionDto) {
+        this.transactionDto = transactionDto;
+        executorService.scheduleAtFixedRate(() ->
+                        transactionService.executeTransactions(),
+                1, 3, TimeUnit.SECONDS);
+    }
+
+    private void executeTransactions() {
+        synchronized (this)
+        {
+            List<Transaction> allExecutableTransaction = transactionDto.getAllTransactionsByStatus(TransactionStatus.STARTED);
+            allExecutableTransaction
+                    .forEach(transaction -> transactionDto.performTransaction(transaction));
+        }
+
+    }
 
 
     public Transaction createTransaction(Transaction transaction) {
@@ -35,8 +68,18 @@ public class TransactionService {
 
             throw new WebApplicationException("The amount should be more than 0",Response.Status.BAD_REQUEST);
         }
-        transactionDto.addTransaction(transaction);
-        transaction.setStatus(TransactionStatus.STARTED);
+        synchronized (this)
+        {
+            transactionDto.addTransaction(transaction);
+            transaction.setStatus(TransactionStatus.STARTED);
+        }
         return transaction;
     }
+
+    public List<Transaction> getAllTransactions()
+    {
+        return transactionDto.getAllTransactionsFromDb();
+    }
+
+
 }
