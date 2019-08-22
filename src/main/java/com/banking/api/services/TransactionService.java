@@ -3,14 +3,12 @@ package com.banking.api.services;
 import com.banking.api.dto.TransactionDto;
 import com.banking.api.models.Transaction;
 import com.banking.api.models.TransactionStatus;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -23,6 +21,9 @@ public class TransactionService {
     private static TransactionService transactionService;
 
 
+    /**
+     * @return It returns the object of this TransactionService class.
+     */
     public static TransactionService getInstance(CurrencyConverterService currencyConverterService) {
         if( transactionService== null){
             synchronized (TransactionService.class) {
@@ -34,8 +35,6 @@ public class TransactionService {
         return transactionService;
     }
 
-
-
     TransactionService(TransactionDto transactionDto) {
         this.transactionDto = transactionDto;
         executorService.scheduleAtFixedRate(() ->
@@ -43,6 +42,10 @@ public class TransactionService {
                 1, 3, TimeUnit.SECONDS);
     }
 
+    /**
+     * this method runs asynchronously in scheduled time period.The job of this method is to execute
+     * all the transactions
+     */
     private void executeTransactions() {
         synchronized (this)
         {
@@ -53,7 +56,13 @@ public class TransactionService {
 
     }
 
-
+    /**
+     * This method validates if a transaction is a valid transaction and adds the transaction into
+     * the list of transaction with the status STARTED.This transaction will be picked up by an
+     * executor later.
+     * @param transaction Transction which will be pushed for execution.
+     * @return This returns the updated transaction.
+     */
     public Transaction createTransaction(Transaction transaction) {
         transaction.setId(atomicInteger.incrementAndGet());
         if (transaction.getFromAccountId() == null || transaction.getToAccountId() == null) {
@@ -76,10 +85,12 @@ public class TransactionService {
         return transaction;
     }
 
+    /**
+     *  This method returns the list of all the transactions from the history.
+     * @return
+     */
     public List<Transaction> getAllTransactions()
     {
         return transactionDto.getAllTransactionsFromDb();
     }
-
-
 }

@@ -13,19 +13,24 @@ import javax.ws.rs.WebApplicationException;
 
 public class TransactionDto {
 
+    /**
+     * ConcurrentHashMap is used for storing all the transactions details. It ensures thread safety.
+     */
     ConcurrentHashMap<Integer,Transaction> transactions = new ConcurrentHashMap<>();
 
     private CurrencyConverterService currencyConverterService;
+    private static TransactionDto transactionDto;
+
+    AccountDto accountDto = AccountDto.getInstance();
 
     private TransactionDto(CurrencyConverterService currencyConverterService) {
         this.currencyConverterService = currencyConverterService;
     }
 
-    AccountDto accountDto = AccountDto.getInstance();
 
-
-    private static TransactionDto transactionDto;
-
+    /**
+     * @return It returns the object of this TransactionDto class.
+     */
     public static TransactionDto getInstance(CurrencyConverterService currencyConverterService) {
         if(transactionDto == null){
             synchronized (TransactionDto.class) {
@@ -38,13 +43,21 @@ public class TransactionDto {
     }
 
 
-
-
-    public Transaction addTransaction(Transaction transaction)
+    /**
+     *
+     * @param transaction Takes an transaction object which will be added in the transactions list
+     *                    this will be picked up later by the execute Transaction method for
+     *                    execution.
+     */
+    public void addTransaction(Transaction transaction)
     {
-        return transactions.put(transaction.getId(),transaction);
+        transactions.put(transaction.getId(),transaction);
     }
 
+    /**
+     *
+     * @return This returns all transactions from the history.
+     */
     public List<Transaction> getAllTransactionsFromDb()
     {
         List<Transaction> allTransactions = new ArrayList<>();
@@ -53,6 +66,12 @@ public class TransactionDto {
         return allTransactions;
     }
 
+    /**
+     *
+     * @param transactionStatus Transaction status according to which the transactions will be
+     *                          filtered
+     * @return List of filtered transaction according to the given status
+     */
     public List<Transaction> getAllTransactionsByStatus(TransactionStatus transactionStatus)
     {
         List<Transaction> allTransactionsByStatus = new ArrayList<>();
@@ -66,6 +85,21 @@ public class TransactionDto {
     }
 
 
+    /**
+     * This method performs the Transaction object provided. All the validations and operations
+     * in order to make the transactions do happen here.Operations are:
+     * <ul>
+     *     <li>Add the transferring amount to blockedAmount from source Bank Account</li>
+     *     <li>Check if the source bank account is having valid balance for the transaction</li>
+     *     <li>Perform the transaction and update the respective bank accounts</li>
+     *     <li>Change the transaction status according to the transaction success or failure </li>
+     *     <li>Clear the blocked amount </li>
+     * </ul>
+     * We are moving the amount into the blocking state but not subtracting it from the balance until transaction will
+     * not be executed.
+     * For concurrency all the method which will be calling this method should take care.
+     * @param transaction Transaction object which will get executed.
+     */
     public void performTransaction(Transaction transaction) {
 
         if (transaction.getId() == null) {
@@ -98,6 +132,7 @@ public class TransactionDto {
                 transaction.setStatus(TransactionStatus.FAILED);
                 transaction.setFailMessage(String.format("There is no enough money. Current balance is %f",
                         fromBankAccount.getBalance().doubleValue()));
+
             } else {
                 fromBankAccount.setBlockedAmount(newBlockedAmount);
                 fromBankAccount.setBalance(newBalance);
@@ -111,13 +146,13 @@ public class TransactionDto {
                 );
 
                 toBankAccount.setBalance(toBankAccount.getBalance().add(amountToTransfer));
-
                 accountDto.updateAccountFromDb(toBankAccount);
-
                 transaction.setStatus(TransactionStatus.SUCCEED);
+                fromBankAccount.setBlockedAmount(fromBankAccount.getBlockedAmount().subtract(newBlockedAmount));
             }
-
             updateTransaction(transaction);
+
+
 
         } catch (WebApplicationException e) {
             if (transaction != null) {
@@ -126,10 +161,13 @@ public class TransactionDto {
                 updateTransaction(transaction);
             }
         }
-
-
     }
 
+    /**
+     *
+     * @param id Unique id of a transaction.
+     * @return Transaction object of the given corresponding id.
+     */
     public Transaction getTransaction(Integer id) {
         if (id==null)
         {
@@ -139,9 +177,13 @@ public class TransactionDto {
         return transactions.get(id);
     }
 
-    public Transaction updateTransaction(Transaction transaction)
+    /**
+     *
+     * @param transaction Transaction object which will be updated
+     */
+    public void updateTransaction(Transaction transaction)
     {
-        return transactions.put(transaction.getId(),transaction);
+        transactions.put(transaction.getId(),transaction);
     }
 
 

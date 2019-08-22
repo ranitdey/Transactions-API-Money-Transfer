@@ -6,15 +6,19 @@ import com.banking.api.models.Account;
 
 public class AccountService {
 
+    /**
+     * This class is a thin wrapper around the respective DTO.
+     */
+
     private static final AccountService accountService = new AccountService();
 
     public static AccountService getInstance() {
         return accountService;
     }
 
-    public Account createNewAccount(Account account)
+    public void createNewAccount(Account account)
     {
-        return AccountDto.getInstance().createEntryInDb(account);
+        AccountDto.getInstance().createEntryInDb(account);
     }
 
     public Account findAccount(String id)

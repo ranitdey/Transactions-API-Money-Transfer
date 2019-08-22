@@ -18,6 +18,11 @@ public class AccountController {
 
     private final static AccountService accountService = AccountService.getInstance();
 
+    /**
+     *
+     * @param accountRequest The bank account object which will get created.
+     * @return This returns the bank account which got created with an unique id.
+     */
     @POST
     @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
@@ -31,6 +36,11 @@ public class AccountController {
         return Response.accepted(account).build();
     }
 
+    /**
+     *
+     * @param id Unique id that gets generated when the account is created.
+     * @return Returns the accounts details corresponding to the given id.
+     */
     @GET
     @Path("/{id}")
     public Response getAccountById(@PathParam("id") String id)
@@ -41,6 +51,5 @@ public class AccountController {
         }
         return Response.ok(accountService.findAccount(id)).build();
     }
-
 
 }

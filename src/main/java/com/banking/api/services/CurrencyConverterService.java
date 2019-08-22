@@ -20,6 +20,13 @@ public class CurrencyConverterService {
                 put(new Pair<>(Currency.EUR, Currency.USD), BigDecimal.valueOf(1.11));
             }});
 
+    /**
+     * This method performs currency exchanges.
+     * @param amount Amount to be exchanged.
+     * @param amountCurrency Currency of the amount specified.
+     * @param targetCurrency Currency in which the amount will get converted.
+     * @return This returns the converted currency.
+     */
     public BigDecimal exchange(BigDecimal amount, Currency amountCurrency, Currency targetCurrency) {
         return amount.multiply(conversionRates.get(new Pair<>(amountCurrency, targetCurrency)));
     }

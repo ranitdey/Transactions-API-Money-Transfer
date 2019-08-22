@@ -18,12 +18,21 @@ public class TransactionController {
 
     private TransactionService transactionsService = TransactionService.getInstance(new CurrencyConverterService());
 
+    /**
+     *
+     * @param transaction This accepts an transaction object which will be made.
+     * @return Returns the transaction object with the status of the transaction.
+     */
     @POST()
     public Response createTransaction(Transaction transaction)  {
         transaction = transactionsService.createTransaction(transaction);
         return Response.ok().entity(transaction).build();
     }
 
+    /**
+     *
+     * @return Returns all the transaction history.
+     */
     @GET()
     public Response getAllTransaction()
     {
