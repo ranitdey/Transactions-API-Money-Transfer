@@ -7,7 +7,7 @@ import org.glassfish.jersey.server.ServerProperties;
 import java.io.IOException;
 import java.net.URI;
 
-public class apiApplication{
+public class ApiApplication{
 
     public static final String BASE_URI = "http://localhost:8080/";
 

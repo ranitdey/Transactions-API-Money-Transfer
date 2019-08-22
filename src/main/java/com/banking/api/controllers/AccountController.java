@@ -12,9 +12,11 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/account")
+@Path(AccountController.BASE_URL)
 @Produces(MediaType.APPLICATION_JSON)
 public class AccountController {
+
+    public static final String BASE_URL = "/account";
 
     private final static AccountService accountService = AccountService.getInstance();
 
@@ -24,7 +26,7 @@ public class AccountController {
      * @return This returns the bank account which got created with an unique id.
      */
     @POST
-    @Path("/create")
+    @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes({MediaType.APPLICATION_JSON})
     public Response createAccount(Account accountRequest)
@@ -33,7 +35,7 @@ public class AccountController {
         account = new Account(accountRequest.getOwnerName(),accountRequest.getBalance(),
                 accountRequest.getBlockedAmount(),accountRequest.getCurrency());
         accountService.createNewAccount(account);
-        return Response.accepted(account).build();
+        return Response.status(Response.Status.CREATED).entity(account).build();
     }
 
     /**

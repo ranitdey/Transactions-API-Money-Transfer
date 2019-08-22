@@ -46,7 +46,7 @@ public class TransactionService {
      * this method runs asynchronously in scheduled time period.The job of this method is to execute
      * all the transactions
      */
-    private void executeTransactions() {
+    public void executeTransactions() {
         synchronized (this)
         {
             List<Transaction> allExecutableTransaction = transactionDto.getAllTransactionsByStatus(TransactionStatus.STARTED);
