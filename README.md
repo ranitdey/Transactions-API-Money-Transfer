@@ -1,6 +1,6 @@
 # Transfer Money Application
 
-##About
+## About
 A RESTful API implementation which allows transfer money from one Bank Account to another in any 
 currency (As of now only USD and EUR is supported).
 
