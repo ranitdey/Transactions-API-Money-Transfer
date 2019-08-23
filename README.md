@@ -176,4 +176,25 @@ Example response:
              "status": "SUCCEED",
              "failMessage": ""
      }]
+     
+#### Get specific Transaction details
+
+The following gets the particular transaction if it exists.
+
+    GET /transactions/1
+
+Example response:
+
+    HTTP 200 OK
+    {
+         "id": 1,
+         "fromAccountId": "44ebe431-d966-441a-aed7-dcaf3d3d3d44",
+         "toAccountId": "7c3b4716-9ff9-401b-a76a-5b0c8730219b",
+         "amount": 16,
+         "currency": "EUR",
+         "creationDate": 1566538441,
+         "updateDate": 1566538448,
+         "status": "SUCCEED",
+         "failMessage": ""
+     }
       
