@@ -8,7 +8,6 @@ import com.banking.api.models.Transaction;
 import com.banking.api.models.TransactionStatus;
 import com.banking.api.services.AccountService;
 import com.banking.api.services.CurrencyConverterService;
-
 import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -77,20 +76,14 @@ public class TransactionDtoTest {
         bankAccountService.createNewAccount(saketAccount);
     }
 
-    /**
-     * Tests that all transactions from Concurrent hash map will be returned
-     */
-    @Test
+    @Test(description = "Tests that all transactions from Concurrent hash map will be returned")
     public void testGetAllTransactions() {
         Collection<Transaction> resultList = transactionDto.getAllTransactionsFromDb();
         assertNotNull(resultList);
         assertEquals(testList, resultList);
     }
 
-    /**
-     * Tests that all transaction's id with particular status will be returned
-     */
-    @Test
+    @Test(description = "Tests that all transaction's id with particular status will be returned")
     public void testGetAllTransactionIdsByStatus() {
         Collection<Transaction> resultTransactionIds = transactionDto.getAllTransactionsByStatus(TransactionStatus.STARTED);
 
@@ -104,7 +97,7 @@ public class TransactionDtoTest {
         assertTrue(secondTransaction);
     }
 
-    @Test
+    @Test(description = "Tests for creating transactions")
     public void transactionCreationTest(){
         TransactionDto transactionDto = TransactionDto.getInstance(moneyExchangeService);
         AccountDto bankAccountDto = AccountDto.getInstance();
@@ -122,7 +115,7 @@ public class TransactionDtoTest {
 
     }
 
-    @Test
+    @Test(description = "Test to check if transactions are getting executed by the executor service")
     public void testTransactionExecution() {
         TransactionDto transactionDto = TransactionDto.getInstance(moneyExchangeService);
         AccountDto bankAccountDto = AccountDto.getInstance();
@@ -154,11 +147,8 @@ public class TransactionDtoTest {
 
         assertEquals(resultTransaction.getStatus(), TransactionStatus.SUCCEED);
         assertThat(ranitInitialBalance.subtract(needToWithdraw), Matchers.comparesEqualTo(ranit.getBalance()));
-
         assertThat(ranitInitialBlocked, Matchers.comparesEqualTo(ranit.getBlockedAmount()));
-
         assertThat(saketInitialBalance.add(needToTransfer), Matchers.comparesEqualTo(saket.getBalance()));
-
         assertThat(saketInitialBlocked, Matchers.comparesEqualTo(saket.getBlockedAmount()));
     }
 

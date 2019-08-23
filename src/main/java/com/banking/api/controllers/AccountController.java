@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public class AccountController {
 
-    public static final String BASE_URL = "/account";
+    public static final String BASE_URL = "/accounts";
 
     private final static AccountService accountService = AccountService.getInstance();
 

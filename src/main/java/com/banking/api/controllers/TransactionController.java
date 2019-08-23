@@ -12,9 +12,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("transaction")
+@Path(TransactionController.BASE_URL)
 @Produces(MediaType.APPLICATION_JSON)
 public class TransactionController {
+    public static final String BASE_URL = "/transactions";
 
     private TransactionService transactionsService = TransactionService.getInstance(new CurrencyConverterService());
 
@@ -26,7 +27,7 @@ public class TransactionController {
     @POST()
     public Response createTransaction(Transaction transaction)  {
         transaction = transactionsService.createTransaction(transaction);
-        return Response.ok().entity(transaction).build();
+        return Response.status(Response.Status.CREATED).entity(transaction).build();
     }
 
     /**

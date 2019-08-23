@@ -17,7 +17,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <jersey.version>2.28</jersey.version>
-        <mainClass>com.banking.api.apiApplication</mainClass>
+        <mainClass>com.banking.api.ApiApplication</mainClass>
     </properties>
 
     <dependencyManagement>

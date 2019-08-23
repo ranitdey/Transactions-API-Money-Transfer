@@ -24,29 +24,21 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.AssertJUnit.assertNotNull;
 
 public class AccountTests {
 
-
-
     private static HttpServer server;
     private static WebTarget target;
-    List<String> idList= new ArrayList<>();
+    private List<String> idList= new ArrayList<>();
 
     @BeforeClass
-    public static void beforeAll() {
-        // start the server
+    public static void setup() {
         server = ApiApplication.startServer();
-        // create the client
         Client c = ClientBuilder.newClient();
-
         target = c.target(ApiApplication.BASE_URI);
     }
 
@@ -55,10 +47,7 @@ public class AccountTests {
         server.shutdownNow();
     }
 
-    /**
-     * Tests that all bank accounts will be returned from the database
-     */
-    @Test
+    @Test(description = "Tests that all bank accounts will be returned from the database")
     public void createAccountTest() {
         AccountService bankAccountService = AccountService.getInstance();
         String OWNER_NAME = "Ranit";
@@ -84,7 +73,7 @@ public class AccountTests {
     }
 
 
-    @Test
+    @Test(description = "Test if getting bank account by id is working")
     public void testGetBankAccountById() {
 
         Response response = target.path(AccountController.BASE_URL + "/" + idList.get(0))

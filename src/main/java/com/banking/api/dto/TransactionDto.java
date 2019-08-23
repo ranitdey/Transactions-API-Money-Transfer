@@ -4,6 +4,8 @@ import com.banking.api.models.Account;
 import com.banking.api.models.Transaction;
 import com.banking.api.models.TransactionStatus;
 import com.banking.api.services.CurrencyConverterService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,8 @@ import javax.ws.rs.WebApplicationException;
 
 
 public class TransactionDto {
+
+    private static final Logger log = LoggerFactory.getLogger(TransactionDto.class);
 
     /**
      * ConcurrentHashMap is used for storing all the transactions details. It ensures thread safety.
@@ -103,6 +107,7 @@ public class TransactionDto {
     public void performTransaction(Transaction transaction) {
 
         if (transaction.getId() == null) {
+            log.info("Transaction do not exists");
             throw new WebApplicationException(
                     "The specified transaction doesn't exists");
         }
@@ -111,6 +116,7 @@ public class TransactionDto {
             transaction = getTransaction(transaction.getId());
 
             if (transaction.getStatus() != TransactionStatus.STARTED) {
+                log.info("Execution failed for transactions with status different than STARTED");
                 throw new WebApplicationException(
                         "Could not execute transaction which is not in PLANNED status");
             }

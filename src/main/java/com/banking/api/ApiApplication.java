@@ -15,7 +15,7 @@ public class ApiApplication{
 
         final HttpServer server = startServer();
 
-        System.out.println("Jersey app started at "+ BASE_URI);
+        System.out.println("Jersey app started at: "+ BASE_URI);
     }
 
     public static HttpServer startServer() {

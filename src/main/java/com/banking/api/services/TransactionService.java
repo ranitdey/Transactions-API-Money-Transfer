@@ -3,6 +3,9 @@ package com.banking.api.services;
 import com.banking.api.dto.TransactionDto;
 import com.banking.api.models.Transaction;
 import com.banking.api.models.TransactionStatus;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -14,6 +17,7 @@ import javax.ws.rs.core.Response;
 
 public class TransactionService {
 
+    private static final Logger log = LoggerFactory.getLogger(TransactionService.class);
 
     private static AtomicInteger atomicInteger = new AtomicInteger(0);
     private static ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -40,6 +44,8 @@ public class TransactionService {
         executorService.scheduleAtFixedRate(() ->
                         transactionService.executeTransactions(),
                 1, 3, TimeUnit.SECONDS);
+        log.info("Starting transaction executor service with initial delay of 1 second and " +
+                "time interval of 3 seconds ");
     }
 
     /**
@@ -49,11 +55,12 @@ public class TransactionService {
     public void executeTransactions() {
         synchronized (this)
         {
+            log.info("Transaction executor invoked. Starting executing transactions");
             List<Transaction> allExecutableTransaction = transactionDto.getAllTransactionsByStatus(TransactionStatus.STARTED);
             allExecutableTransaction
                     .forEach(transaction -> transactionDto.performTransaction(transaction));
+            log.info("Transaction execution cycle completed");
         }
-
     }
 
     /**
@@ -64,6 +71,7 @@ public class TransactionService {
      * @return This returns the updated transaction.
      */
     public Transaction createTransaction(Transaction transaction) {
+        log.info("Initialising transaction creation process for transaction");
         transaction.setId(atomicInteger.incrementAndGet());
         if (transaction.getFromAccountId() == null || transaction.getToAccountId() == null) {
             throw new WebApplicationException("The transaction has not provided from Bank Account " +
@@ -81,6 +89,7 @@ public class TransactionService {
         {
             transactionDto.addTransaction(transaction);
             transaction.setStatus(TransactionStatus.STARTED);
+            log.info("Added transaction successfully to executable transaction list");
         }
         return transaction;
     }
