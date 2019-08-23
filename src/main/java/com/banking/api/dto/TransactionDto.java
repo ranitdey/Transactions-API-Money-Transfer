@@ -23,7 +23,7 @@ public class TransactionDto {
 
     AccountDto accountDto = AccountDto.getInstance();
 
-    private TransactionDto(CurrencyConverterService currencyConverterService) {
+    public TransactionDto(CurrencyConverterService currencyConverterService) {
         this.currencyConverterService = currencyConverterService;
     }
 

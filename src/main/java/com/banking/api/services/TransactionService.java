@@ -35,7 +35,7 @@ public class TransactionService {
         return transactionService;
     }
 
-    TransactionService(TransactionDto transactionDto) {
+    public TransactionService(TransactionDto transactionDto) {
         this.transactionDto = transactionDto;
         executorService.scheduleAtFixedRate(() ->
                         transactionService.executeTransactions(),
