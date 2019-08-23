@@ -119,8 +119,8 @@ created by some reason the Error will be returned.
 #### Structure
     {
         "id": <Integer>,
-        "fromBankAccountId": <string>,
-        "toBankAccountId": <string>,
+        "fromAccountId": <string>,
+        "toAccountId": <string>,
         "amount": <BigDecimal>,
         "currency": <string - one from "USD", "EUR">,
         "creationDate": <timestamp>,
@@ -137,8 +137,8 @@ automatically.
 
     POST /transactions
     {
-        "fromBankAccountId": "44ebe431-d966-441a-aed7-dcaf3d3d3d44",
-        "toBankAccountId": "7c3b4716-9ff9-401b-a76a-5b0c8730219b",
+        "fromAccountId": "44ebe431-d966-441a-aed7-dcaf3d3d3d44",
+        "toAccountId": "7c3b4716-9ff9-401b-a76a-5b0c8730219b",
         "amount": 16,
         "currency": "EUR"
     }
@@ -148,8 +148,8 @@ Example response:
     HTTP 201 CREATED
     {
         "id": 1,
-        "fromBankAccountId": "44ebe431-d966-441a-aed7-dcaf3d3d3d44",
-        "toBankAccountId": "7c3b4716-9ff9-401b-a76a-5b0c8730219b",
+        "fromAccountId": "44ebe431-d966-441a-aed7-dcaf3d3d3d44",
+        "toAccountId": "7c3b4716-9ff9-401b-a76a-5b0c8730219b",
         "amount": 16,
         "currency": "EUR",
         "creationDate": 1566538441,
@@ -167,8 +167,8 @@ Example response:
     HTTP 200 OK    
     [{
              "id": 1,
-             "fromBankAccountId": "44ebe431-d966-441a-aed7-dcaf3d3d3d44",
-             "toBankAccountId": "7c3b4716-9ff9-401b-a76a-5b0c8730219b",
+             "fromAccountId": "44ebe431-d966-441a-aed7-dcaf3d3d3d44",
+             "toAccountId": "7c3b4716-9ff9-401b-a76a-5b0c8730219b",
              "amount": 16,
              "currency": "EUR",
              "creationDate": 1566538441,
