@@ -4,7 +4,6 @@ package com.banking.api.controllers;
 import com.banking.api.models.Transaction;
 import com.banking.api.services.CurrencyConverterService;
 import com.banking.api.services.TransactionService;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;

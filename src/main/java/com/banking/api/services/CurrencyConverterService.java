@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
 import javafx.util.Pair;
 
 public class CurrencyConverterService {

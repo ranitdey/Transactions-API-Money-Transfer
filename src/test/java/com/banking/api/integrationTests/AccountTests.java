@@ -2,24 +2,17 @@ package com.banking.api.integrationTests;
 
 import com.banking.api.ApiApplication;
 import com.banking.api.controllers.AccountController;
-import com.banking.api.dto.AccountDto;
 import com.banking.api.models.Account;
 import com.banking.api.models.Currency;
 import com.banking.api.services.AccountService;
-
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
