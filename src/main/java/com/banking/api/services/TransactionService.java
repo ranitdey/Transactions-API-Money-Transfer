@@ -101,4 +101,22 @@ public class TransactionService {
     {
         return transactionDto.getAllTransactionsFromDb();
     }
+
+    /**
+     * This method returns specific transaction by searching for it with id.
+     * @param id ID of the transaction to be searched for.
+     * @return This returns the Transaction object by searching it with its id.
+     */
+    public Transaction getTransactionById(Integer id)
+    {
+        if (id!=null)
+        {
+            return transactionDto.getTransaction(id);
+        }
+        else
+            {
+            throw new WebApplicationException("Transaction do not exist",Response.Status.BAD_REQUEST);
+            }
+
+    }
 }

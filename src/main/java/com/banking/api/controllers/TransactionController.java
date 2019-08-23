@@ -7,6 +7,7 @@ import com.banking.api.services.TransactionService;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -37,6 +38,18 @@ public class TransactionController {
     public Response getAllTransaction()
     {
         return Response.ok().entity(transactionsService.getAllTransactions()).build();
+    }
+
+    /**
+     *
+     * @param id Takes unique id for the transaction to be searched.
+     * @return This returns the specific transaction which is searched.
+     */
+    @GET
+    @Path("/{id}")
+    public Response getTransactionById(@PathParam("id") Integer id)
+    {
+        return Response.ok().entity(transactionsService.getTransactionById(id)).build();
     }
 }
 
